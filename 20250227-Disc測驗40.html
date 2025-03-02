@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiSC 人格特質測驗</title>
+
+    <!-- 添加 meta 標籤 -->
+    <meta name="author" content="莊士勇Steven">
+    <meta name="description" content="這是一個 DISC 人格測驗，幫助您了解自己在不同情境下的行為特徵。">
+    <meta name="keywords" content="DISC, 人格測驗, 性格測試, 職場測評, 性格分析">
+    <meta property="og:title" content="DISC 人格測驗">
+    <meta property="og:description" content="測試您的 DISC 人格特質，了解您是更像老虎、孔雀、無尾熊還是貓頭鷹。">
+    <meta property="og:image" content="DiSC_og_image.png">
+    <meta property="og:type" content="website">
+
+    <style>
+        /* 全局字型與排版 */
+        body {
+            font-family: 'Arial', sans-serif; /* 設定字型 */
+            text-align: center; /* 文字置中 */
+            padding: 20px; /* 內邊距 */
+            background-color: #f4f7fa; /* 背景色 */
+            margin: 0; /* 去除預設邊距 */
+            box-sizing: border-box; /* 設定 box-sizing，避免 padding 影響尺寸 */
+        }
+
+        /* h1標題樣式 */
+        h1 {
+            font-size: 30px;  /* 設定字型大小 */
+            font-weight: bold; /* 強調主標題 */
+            text-align: center;/* 文字置中 */
+            line-height: 1.5; /* 調小行距預設1.5，讓標題與說明文字更貼近 */
+            margin-bottom: 3px; /* 減少標題與下一行的距離 */
+            margin-top: 0px; /* 減少與上一行的距離 3px */
+            color: #343a40; /* 字型 深灰色 */
+        }
+
+        /* h2標題樣式 */
+        h2 {
+            font-size: 22px;  /* 設定字型大小 */
+            font-weight: bold; /* 副標題常規字重 normal bold*/
+            text-align: center;/* 文字置中 */
+            line-height: 1.5; /* 調小行距預設1.5，讓標題與說明文字更貼近 */
+            margin-bottom: 3px; /* 減少標題與下一行的距離 */
+            margin-top: 3px; /* 減少與上一行的距離 */
+            color: #003366; /* 字型 深藍色 */
+        }
+
+
+        /* h3 標題樣式 */
+        h3 {
+            font-size: 20px;   /* 設定字型大小 */
+            font-weight: normal; /* 副標題常規字重 */
+            color: #007bff;    /* 字型 深藍色 */
+            text-align: center;/* 文字置中 */
+            line-height: 1.0; /* 調小行距預設1.5，讓標題與說明文字更貼近 */
+            margin-bottom: 3px; /* 減少標題與下一行的距離 */
+            margin-top: 3px; /* 減少與上一行的距離 */
+            margin-bottom: 0px; /* 設定底部間距 15px*/
+        }
+
+        .question-container {
+            display: none; /* 預設不顯示問題區塊 */
+        }
+
+        .question-container.active {
+            display: block; /* 當 active 類別添加時，顯示問題區塊 */
+        }
+
+        .btn {
+            display: block; /* 讓按鈕顯示為塊狀元素 */
+            width: 90%; /* 按鈕寬度 */
+            margin: 10px auto; /* 上下間距及置中 */
+            padding: 12px; /* 內邊距 */
+            font-size: 16px; /* 字型大小 */
+            background-color: #E9ECEF; /* 背景顏色 */
+            color: ; #333333;/* white文字顏色 */
+            border: none; /* 無邊框 */
+            border-radius: 8px; /* 邊角圓角化 */
+            cursor: pointer; /* 滑鼠指標變成手形 */
+            transition: background-color 0.3s; /* 滑鼠移動時顏色變化 */
+        }
+
+        .btn:hover {
+            background-color: /*#D6D8DB;  滑鼠懸停時背景顏色 */
+        }
+
+        .btn:disabled {
+            background-color: #ccc; /* 禁用按鈕顏色 */
+            cursor: not-allowed; /* 禁用時滑鼠指標顯示不可用 */
+        }
+
+        .btn-container {
+            margin-top: 20px; /* 按鈕區塊上方間距 */
+        }
+
+	/* 上一題 & 下一題 按鈕樣式 */
+	#prev-button, #next-button {
+	   width: 45%; /* 按鈕寬度 */
+	   max-width: 200px; /* 按鈕限制最大寬度 */
+	}
+
+        /* 結果頁面 */
+        #result-page {
+            display: none; /* 預設結果頁面不顯示 */
+        }
+
+        #result-page.active {
+            display: block; /* 當 active 類別添加時顯示結果頁面 */
+        }
+
+        /* 使用CSS Grid呈現結果的表格 */
+        .matrix {
+            display: grid; /* 使用 grid 布局 */
+            grid-template-columns: 1fr 1fr; /* 設定為兩列 */
+            gap: 5px; /* 兩個格子之間的間距 */
+            margin: 30px auto; /* 上下間距及置中 */
+            width: 80%; /* 設定表格寬度 */
+            height: 80%; /* 設定表格高度 */
+            max-width: 600px; /* 設定最大寬度 */
+            max-height: 600px; /* 設定最大高度 */
+            border: 0px solid #000; /* 設定表格邊框 */
+            padding: 10px; /* 內邊距 */
+            box-sizing: border-box; /* 設定 box-sizing，避免 padding 影響尺寸 */
+        }
+
+        .matrix div {
+            border: 1px solid #000; /* 設定格子邊框 */
+            padding: 5px; /* 設定格子內邊距 */
+            text-align: center; /* 文字置中 */
+            font-size: 18px; /* 設定字型大小 */
+        }
+
+        /* 讓格子內容呈現兩行 */
+        .matrix div .animal {
+            font-size: 80px; /* 調整動物表情符號大小，原始為22，增大為50 */
+            display: block; /* 確保動物表情符號占一行 */
+            margin-bottom: 0px; /* 調整動物表情符號與名稱之間的間距 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* 加上陰影效果 */
+        }
+
+        .matrix div .animal-name {
+            font-size: 30px; /* 調整動物名稱大小 原始18 */
+            display: block; /* 確保名稱顯示在新的一行 */
+            margin-top: 0px; /* 調整名稱與上方動物表情符號的距離 */
+        }
+         /* 數字 */
+        .matrix div .count {
+            font-size: 60px; /* 調整數字大小，原始為16，增大為60 */
+            display: block; /* 確保數字在新的一行顯示 */
+            margin-top: 0px; /* 增加數字與上方動物表情符號之間的距離 */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4); /* 為數字加上陰影 */
+        }
+
+/* 老虎格子 */
+#tiger {
+    background-color: #FFB6B6; /* 淡紅色 */
+}
+
+/* 孔雀格子 */
+#peacock {
+    background-color: #FFFACD; /* 淡黃色 */
+}
+
+/* 無尾熊格子 */
+#koala {
+    background-color: #D3F9E3; /* 淡綠色 */
+}
+
+/* 貓頭鷹格子 */
+#owl {
+    background-color: #B3D9FF; /* 淡藍色 */
+}
+
+/* personality 回應性格 顯示區塊樣式設定 */
+#personality {
+    font-size: 20px;
+    text-align: center; /* 讓文字靠左對齊 */
+    width: 80%; /* 設定寬度為80% */
+    max-width: 600px; /* 設定最大寬度 */
+    margin: 20px auto; /* 設置自動居中 */
+    word-wrap: break-word; /* 讓長文字自動換行 */
+}
+
+	/* 分隔線樣式 */
+	.divider {
+	    border-top: 1px solid #000; /* 設定分隔線的厚度為 2px，顏色為黑色 (#000) */
+	    margin: 20px 0; /* 上下邊距 20px，左右邊距 0px，讓分隔線和周圍的內容保持適當的空間 */
+	    width: 100%; /* 設定分隔線的寬度為 100%，使其橫跨容器的整個寬度 */
+	}
+
+        /* 進度條樣式 */
+        .progress-bar {
+            width: 100%; /* 進度條寬度 */
+            height: 20px; /* 進度條高度 */
+            background-color: #ddd; /* 進度條背景顏色 */
+            border-radius: 10px; /* 進度條圓角 */
+            margin: 20px 0; /* 進度條上下間距 */
+    		position: relative; /* 為了讓文字置中 */
+        }
+
+        .progress-bar span {
+            display: block; /* 讓進度條填充元素顯示為區塊 */
+            height: 100%; /* 填充元素高度為100% */
+            background-color: #4CAF50; /* 進度條顏色 */
+            border-radius: 10px; /* 填充元素圓角 */
+        }
+
+.progress-text {
+    position: absolute; /* 讓文字絕對定位 */
+    top: 50%; /* 垂直居中 */
+    left: 50%; /* 水平居中 */
+    transform: translate(-50%, -50%); /* 精確居中 */
+    color: white; /* 文字顏色 */
+    font-size: 14px; /* 文字大小 */
+    font-weight: bold; /* 文字加粗 */
+}
+
+
+        /* 響應式調整，對手機進行調整 */
+        @media (max-width: 600px) {
+            .matrix {
+                width: 100%; /* 手機屏幕上表格寬度設為100% */
+                height: auto; /* 手機屏幕上表格高度自動調整 */
+                max-width: 100%; /* 手機屏幕上最大寬度設為100% */
+                max-height: none; /* 手機屏幕上無最大高度限制 */
+                padding: 5px; /* 內邊距縮小 */
+            }
+
+            .matrix div {
+                font-size: 16px; /* 調整格子字型大小 */
+                padding: 3px; /* 調整格子內邊距 */
+            }
+        }
+
+/* 讓格子顯示圓角並設置顏色 */
+.matrix div {
+    border: 1px solid #000; /* 設定格子邊框 */
+    padding: 5px; /* 設定格子內邊距 */
+    text-align: center; /* 文字置中 */
+    font-size: 18px; /* 設定字型大小 */
+    border-radius: 12px; /* 圓角設置 */
+}
+
+        /* 頁尾樣式 */
+        .footer {
+            width: 100%;
+            text-align: center;
+            /*background-color: #f8f9fa;  淺灰背景 */
+            padding: 5px 0;
+            font-size: 18px;
+            color: #6c757d; /* 灰色文字 */
+            margin-top: 20px; /* 給上方留點間距，避免和內容過於擁擠 */
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <h1>DiSC 人格特質測驗 40</h1>
+
+    <!-- 測驗頁面 -->
+    <div id="question-container" class="question-container active">
+        <h2 id="question-text"></h2>
+
+        <!-- 顯示選項的容器 -->
+        <div id="options-container"></div>
+
+        <div class="btn-container">
+            <button class="btn" id="prev-button" onclick="prevQuestion()" style="display:none;">重作上一題</button>
+            <button class="btn" id="next-button" onclick="nextQuestion()"disabled>自動下一題</button>
+        </div>
+
+        <!-- 進度條 -->
+        <div class="progress-bar">
+            <span id="progress-bar-fill"></span>
+
+    <!-- 顯示題數/總題數 -->
+    <div id="progress-text" class="progress-text"></div>
+
+        </div>
+
+
+
+
+    <!-- 這裡是版權宣告 開始-->
+<footer class="footer">
+    <p>&copy;2025 GCDF全球職涯發展師 莊士勇 設計</p>
+</footer>
+    </div>
+
+    <!-- 結果頁面 -->
+    <div id="result-page">
+        <h2>測驗結果</h2>
+        <div class="matrix">
+            <div id="tiger">
+                <span class="animal">🐯</span>
+                <span class="animal-name">老虎</span>
+                <span class="count" id="tiger-count">0</span>
+            </div>
+            <div id="peacock">
+                <span class="animal">🦚</span>
+                <span class="animal-name">孔雀</span>
+                <span class="count" id="peacock-count">0</span>
+            </div>
+            <div id="owl">
+                <span class="animal">🦉</span>
+                <span class="animal-name">貓頭鷹</span>
+                <span class="count" id="owl-count">0</span>
+            </div>
+            <div id="koala">
+                <span class="animal">🐨</span>
+                <span class="animal-name">無尾熊</span>
+                <span class="count" id="koala-count">0</span>
+            </div>
+        </div>
+    <!-- 這裡是提醒說明 開始-->
+                <h3>請截圖本頁面，請莊老師為您解讀喔</h3>
+    <!-- 這裡是提醒說明 結束-->
+        <div id="personality"></div>
+    <!-- 這裡是版權宣告 開始-->
+<footer class="footer">
+    <p>&copy;2025 GCDF全球職涯發展師 莊士勇 設計</p>
+</footer>
+    <!-- 這裡是版權宣告 結束-->
+    </div>
+
+    <!-- 載入外部的問題資料 -->
+    <script src="questions_40.js"></script>
+
+    <!-- 載入外部的回饋資料 -->
+    <script src="feedbackDatabase.js"></script>
+
+    <script>
+    // 變數初始化
+    let answers = [];    // 用戶選擇的答案
+    let currentQuestionIndex = 0;  // 當前問題索引
+    let shuffledQuestions = [];  // 用來儲存打亂順序的題目列表
+
+    // 隨機打亂陣列的函數
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // 交換元素
+        }
+    }
+
+    // 初始化題目並打亂順序
+    function initQuestions() {
+        shuffledQuestions = [...questions];  // 複製題目
+        shuffle(shuffledQuestions);  // 隨機打亂題目順序
+        updateQuestion();  // 更新顯示
+    }
+
+// 更新問題顯示
+function updateQuestion() {
+    const question = shuffledQuestions[currentQuestionIndex]; // 使用打亂後的題目
+    document.getElementById("question-text").textContent = question.text;
+
+    // 清空舊的選項
+    const optionsContainer = document.getElementById("options-container");
+    optionsContainer.innerHTML = "";
+
+    // 顯示選項
+    question.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.classList.add("btn");
+        button.textContent = option;
+        button.onclick = () => selectAnswer(index);
+        optionsContainer.appendChild(button);
+    });
+
+    // 更新上一題與下一題按鈕狀態
+    document.getElementById("prev-button").style.display = currentQuestionIndex === 0 ? "none" : "inline-block";
+    document.getElementById("next-button").style.display = currentQuestionIndex === questions.length - 1 ? "none" : "inline-block";
+
+
+    // 更新進度條
+    const progressBar = document.getElementById("progress-bar-fill");
+    const progress = (currentQuestionIndex + 1) / shuffledQuestions.length * 100;
+    progressBar.style.width = progress + "%";
+
+    // 更新題數顯示（例如：1/40）
+    const progressText = document.getElementById("progress-text");
+    progressText.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+
+}
+
+        // 選擇答案並跳到下一題
+        function selectAnswer(answerIndex) {
+            answers[currentQuestionIndex] = answerIndex;
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                updateQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // 回到上一題
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                updateQuestion();
+            }
+        }
+
+// 性格分析的描述
+const personalityDescriptions = [
+    {
+        animal: "老虎",
+        type: "控制/支配型（Dominance）",
+        description: "你擁有強烈的目標導向和決策能力，這使你在面對挑戰時，往往能夠迅速做出決定並推動事情向前發展。你不怕冒險，並且對達成結果有很高的期待。你擅長帶領他人，也能夠快速識別問題並提出解決方案。不過，有時你可能會太過專注於結果，而忽視他人的感受或需求。因此，記得在與他人合作時，留意聆聽他們的聲音，並保持開放的心態。"
+    },
+    {
+        animal: "孔雀",
+        type: "影響/社交型（Influence）",
+        description: "你是一個充滿活力和親和力的人，喜歡與人互動並影響他人的情緒和行為。你具備很強的溝通能力，能夠輕鬆地建立聯繫並激勵他人。你對新鮮事物充滿興奮，並且善於在社交場合中自如地應對。然而，有時你可能會因為太關注他人的反應而忽略自己的需求。試著學會在做決定時更加專注於自己的內心聲音，並平衡好自己與他人的期望。"
+    },
+    {
+        animal: "無尾熊",
+        type: "穩健/支持型（Steadiness）",
+        description: "你擅長維持穩定和和諧的環境，並且樂於支持他人，尤其是在他們需要幫助的時候。你是團隊中的穩定力量，總是能夠在他人面臨困難時提供支持。你重視關係並且願意為他人付出，但有時可能會過於避免衝突，甚至會犧牲自己的需求來迎合他人。學會適時表達自己的觀點並設定邊界，這樣能幫助你更健康地維持人際關係。"
+    },
+    {
+        animal: "貓頭鷹",
+        type: "分析/服從型（Compliance）",
+        description: "你是一個深思熟慮的人，注重細節和準確性。你喜歡在做任何決策之前進行分析，並且有很強的規劃和組織能力。你對工作有很高的標準，並且總是力求完美。然而，有時你可能會過於專注於細節或規範，這可能會讓你在一些情況下難以快速行動。記得在需要時放鬆自己，接受某些情況的不完美，並且在面對不確定性時能夠更果斷地做出選擇。"
+    }
+];
+
+// 顯示結果頁面
+function showResults() {
+    // 統計答案
+    const counts = [0, 0, 0, 0];
+    answers.forEach(answer => counts[answer]++);
+
+    // 顯示統計數字，並加上動物圖標
+    document.getElementById("tiger-count").textContent = `${counts[0]}`;
+    document.getElementById("peacock-count").textContent = `${counts[1]}`;
+    document.getElementById("koala-count").textContent = `${counts[2]}`;
+    document.getElementById("owl-count").textContent = `${counts[3]}`;
+
+    // 計算主要性格
+    let max = Math.max(...counts);
+    let maxIndexes = [];
+    counts.forEach((count, index) => {
+        if (count === max) {
+            maxIndexes.push(index);
+        }
+    });
+
+    // 主要性格顯示多個動物（當有兩個或以上的最大值）
+    const personalities = ["🐯老虎", "🦚孔雀", "🐨無尾熊", "🦉貓頭鷹"];
+    let primaryPersonality = "你的主要性格是：";
+    maxIndexes.forEach(index => {
+        primaryPersonality += `${personalities[index]} `;
+    });
+
+    // 計算次要性格
+    let remainingCounts = counts.map((count, index) => ({ index, count })).filter(item => !maxIndexes.includes(item.index));
+    let secondMax = Math.max(...remainingCounts.map(item => item.count));
+    let secondMaxIndexes = remainingCounts.filter(item => item.count === secondMax).map(item => item.index);
+
+    // 次要性格顯示兩個或以上有相同第二大數字的動物
+    let secondaryPersonality = "你的次要性格是：";
+    secondMaxIndexes.forEach(index => {
+        secondaryPersonality += `${personalities[index]} `;
+    });
+
+    // 顯示性格分析
+    let personalityAnalysis = generatePersonalityAnalysis(maxIndexes, "主要性格分析");
+    personalityAnalysis += `<div class="divider"></div>`; // 加入分隔線
+    personalityAnalysis += generatePersonalityAnalysis(secondMaxIndexes, "次要性格分析");
+
+    // 顯示性格分析
+    document.getElementById("personality").innerHTML = `
+    <div class="divider"></div> <!-- 在這裡插入分隔線 -->
+        <strong>${primaryPersonality}</strong></p>
+        <p><strong>${secondaryPersonality}</strong></p>
+    <div class="divider"></div> <!-- 在這裡插入分隔線 -->
+        <div>${personalityAnalysis}</div>
+    <div class="divider"></div> <!-- 在這裡插入分隔線 -->
+    `;
+
+    // 顯示結果頁面
+    document.getElementById("question-container").style.display = "none";
+    document.getElementById("result-page").classList.add("active");
+}
+
+// 根據性格索引生成簡化的分析文字
+function generatePersonalityAnalysis(indexes, label) {
+    let analysis = `${label}: `;
+    indexes.forEach(index => {
+        const personality = personalityDescriptions[index];
+        analysis += `<p><strong>${personality.animal}</strong> - ${personality.type}</p>`;
+        analysis += `<p>${personality.description}</p>`;
+    });
+    return analysis;
+}
+
+    // 當頁面載入時初始化題目順序
+    window.onload = function() {
+        initQuestions();  // 初始化並顯示第一題
+    };
+</script>
+</body>
+</html>
