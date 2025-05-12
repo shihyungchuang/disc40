@@ -5,14 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DiSC 人格特質測驗</title>
 
-    <!-- 添加 meta 標籤 -->
+    <!-- 基本資訊 -->
+    <meta name="version" content="2.0">
     <meta name="author" content="莊士勇Steven">
-    <meta name="description" content="這是一個 DISC 人格測驗，幫助您了解自己在不同情境下的行為特徵。">
+    <meta name="description" content="本測驗依據 DISC 行為模式理論設計，幫助您了解自己在不同情境下的行為特徵，發現個人優勢並提高職場表現。">
     <meta name="keywords" content="DISC, 人格測驗, 性格測試, 職場測評, 性格分析">
+
+    <!-- 社群分享設定 -->
     <meta property="og:title" content="DISC 人格測驗">
-    <meta property="og:description" content="測試您的 DISC 人格特質，了解您是更像老虎、孔雀、無尾熊還是貓頭鷹。">
+    <meta property="og:description" content="測試您的 DISC 人格特質，了解您在職場中的行為風格，是像老虎、孔雀、無尾熊還是貓頭鷹，並探索自己的優勢與發展方向。">
     <meta property="og:image" content="DiSC_og_image.png">
     <meta property="og:type" content="website">
+    <meta property="og:updated_time" content="2025-05-12T00:00:00Z">
+
+    <!-- 釋出日期 -->
+    <meta property="article:published_time" content="2025-02-27T00:00:00Z">
+    <meta property="article:modified_time" content="2025-05-12T00:00:00Z">
 
     <style>
         /* 全局字型與排版 */
@@ -180,6 +188,7 @@
     width: 80%; /* 設定寬度為80% */
     max-width: 600px; /* 設定最大寬度 */
     margin: 20px auto; /* 設置自動居中 */
+            text-align: left;/* 文字靠左 */
     word-wrap: break-word; /* 讓長文字自動換行 */
 }
 
@@ -242,6 +251,14 @@
     font-size: 18px; /* 設定字型大小 */
     border-radius: 12px; /* 圓角設置 */
 }
+
+/* 完成測驗時間文字樣式 */
+#complete-time {
+  margin-top: 1em;         /* 與上方元素間隔一點距離 */
+  color: #007BFF;          /* 使用亮藍色（Bootstrap 標準藍），清晰又有活力 */
+  font-size: 16px;         /* 設定文字大小為 16px，適合輔助資訊顯示 */
+}
+
 
         /* 頁尾樣式 */
         .footer {
@@ -316,13 +333,11 @@
                 <span class="count" id="koala-count">0</span>
             </div>
         </div>
-    <!-- 這裡是提醒說明 開始-->
-                <h3>請截圖本頁面，請莊老師為您解讀喔</h3>
-    <!-- 這裡是提醒說明 結束-->
+        <div id="complete-time">完成時間：</div>
         <div id="personality"></div>
     <!-- 這裡是版權宣告 開始-->
 <footer class="footer">
-    <p>&copy;2025 GCDF全球職涯發展師 莊士勇 設計</p>
+    本測驗依據 William Moulton Marston(1928)DISC行為模式理論，<BR>並由 莊士勇 職涯諮詢師 依現代職場情境重新設計。<BR>&copy;2025 GCDF全球職涯發展師 莊士勇 設計
 </footer>
     <!-- 這裡是版權宣告 結束-->
     </div>
@@ -500,6 +515,17 @@ function generatePersonalityAnalysis(indexes, label) {
     });
     return analysis;
 }
+
+// 取得目前的日期和時間(開始)
+const now = new Date();
+const dateString = now.toLocaleDateString();  // 將日期格式化為字串，例如：2025/5/12
+const timeString = now.toLocaleTimeString();  // 將時間格式化為字串，例如：14:32:18
+
+ // 顯示完成時間到網頁上的元素（ID 為 complete-time）
+document.getElementById('complete-time').innerHTML = `完成時間：${dateString} ${timeString}<br>請截圖本頁面，請莊老師為您解讀喔`;
+
+// 取得目前的日期和時間(結束)
+
 
     // 當頁面載入時初始化題目順序
     window.onload = function() {
